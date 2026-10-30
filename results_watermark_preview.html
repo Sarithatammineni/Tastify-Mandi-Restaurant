@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<body style="background:#111;color:#eee;font-family:sans-serif">
+<h2>Watermark candidate crops</h2>
+<p>Rows: original band (dark boost / bright boost), tophat / blackhat</p>
+<script>
+const bands = ['top','btm'];
+const styles = {dark:'cvband_', bright:'cvband_', hat:'hat_'};
+let html = '';
+for (const band of bands) {
+  for (const key of [['original dark', 'cvband_'+band+'_dark.png'],
+                     ['original bright','cvband_'+band+'_bright.png'],
+                     ['tophat','hat_tophat_'+band+'.png'],
+                     ['blackhat','hat_bothat_'+band+'.png']]) {
+    html += '<h3>' + band + ' — ' + key[0] + '</h3>';
+    html += '<img src="results/' + key[1] + '" style="width:100%;image-rendering:auto">';
+  }
+}
+document.body.innerHTML += html;
+</script>
+</body>
+</html>
