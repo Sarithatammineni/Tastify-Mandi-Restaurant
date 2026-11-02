@@ -253,7 +253,7 @@ function updateWaLink() {
   const msg =
     "Hi Tastify! I'd like to order:\n\n" + lines.join("\n") +
     "\n\nTotal: ₹" + cartTotal().toLocaleString("en-IN") +
-    "\n\n(Name: __)\n(Delivery / Dine-in: __)\n(Address: __)";
+    "\n\n(Name: __)\n(Address: __)";
   a.href = `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(msg)}`;
 }
 
