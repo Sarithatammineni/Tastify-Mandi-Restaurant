@@ -1,34 +1,134 @@
+
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tastify — Arabian Mandi &amp; Restaurant | Maisammaguda, Hyderabad</title>
-  <meta name="description" content="Tastify — Arabian Mandi & Restaurant in Maisammaguda, Hyderabad. Chicken Mandi, Biryanis, Starters & more. Order on WhatsApp.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23c8402f'/><text x='50' y='68' font-size='52' text-anchor='middle'>🍗</text></svg>">
-  <link rel="stylesheet" href="styles.css?v=20261028a">
+
+  <!-- Primary SEO -->
+  <title>Tastify Mandi Restaurant | Chicken Mandi in Maisammaguda, Hyderabad</title>
+
+  <meta name="description"
+    content="Visit Tastify Arabian Mandi & Restaurant in Maisammaguda, Hyderabad. Enjoy chicken mandi, mutton mandi, dum biryani, special mandi thalis and family combos. Explore our menu and order on WhatsApp.">
+
+  <meta name="robots" content="index, follow, max-image-preview:large">
+
+  <meta name="author" content="Tastify Arabian Mandi & Restaurant">
+
+  <link rel="canonical" href="https://tastify-beta.vercel.app/">
+
+  <meta name="theme-color" content="#111111">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tastify">
+  <meta property="og:title"
+    content="Tastify Arabian Mandi & Restaurant | Hyderabad">
+  <meta property="og:description"
+    content="Discover delicious Arabian chicken mandi, mutton mandi, dum biryanis and family meals at Tastify, Maisammaguda, Hyderabad.">
+  <meta property="og:url"
+    content="https://tastify-beta.vercel.app/">
+  <meta property="og:image"
+    content="https://tastify-beta.vercel.app/assets/img/restaurant.png">
+  <meta property="og:image:alt"
+    content="Tastify Arabian Mandi Restaurant in Maisammaguda, Hyderabad">
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title"
+    content="Tastify Mandi Restaurant | Hyderabad">
+  <meta name="twitter:description"
+    content="Chicken mandi, mutton mandi, biryanis and family meals at Tastify, Maisammaguda, Hyderabad.">
+  <meta name="twitter:image"
+    content="https://tastify-beta.vercel.app/assets/img/restaurant.png">
+
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Restaurant Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "@id": "https://tastify-beta.vercel.app/#restaurant",
+    "name": "Tastify Arabian Mandi & Restaurant",
+    "url": "https://tastify-beta.vercel.app/",
+    "image": [
+      "https://tastify-beta.vercel.app/assets/img/restaurant.png",
+      "https://tastify-beta.vercel.app/assets/img/dishes/mandi-chicken-tastify.webp",
+      "https://tastify-beta.vercel.app/assets/img/dishes/chicken-biryani-tastify.webp"
+    ],
+    "telephone": "+919966888060",
+    "priceRange": "₹140 - ₹2200",
+    "servesCuisine": [
+      "Arabian",
+      "Mandi",
+      "Biryani",
+      "Indian"
+    ],
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "HF63+X22, Maisammaguda, Bhadurpalle",
+      "addressLocality": "Hyderabad",
+      "addressRegion": "Telangana",
+      "postalCode": "500100",
+      "addressCountry": "IN"
+    },
+    "hasMenu": "https://tastify-beta.vercel.app/#menu",
+    "sameAs": [
+      "https://www.google.com/maps/search/?api=1&query=Tastify%20Maisammaguda%20Hyderabad"
+    ]
+  }
+  </script>
+
+  <!-- Website Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Tastify",
+    "alternateName": "Tastify Mandi Restaurant",
+    "url": "https://tastify-beta.vercel.app/"
+  }
+  </script>
+
 </head>
+
 <body>
 
   <!-- ======= Header ======= -->
   <header class="site-header">
-    <a class="brand" href="#top">
+    <a class="brand" href="#top" aria-label="Tastify Home">
       <span class="brand-badge" aria-hidden="true">T</span>
       <span class="brand-text">
         <strong>Tastify</strong>
         <small>Arabian Mandi &amp; Restaurant</small>
       </span>
     </a>
-    <nav class="site-nav" aria-label="Main">
+
+    <nav class="site-nav" aria-label="Main navigation">
       <a href="#menu">Menu</a>
       <a href="#specials">Specials</a>
       <a href="#reviews">Reviews</a>
       <a href="#visit">Visit</a>
     </nav>
+
     <div class="header-actions">
-      <a class="call-btn" href="tel:+919966888060" aria-label="Call Tastify">📞 <span>099668 88060</span></a>
+      <a class="call-btn" href="tel:+919966888060"
+        aria-label="Call Tastify Restaurant">
+        📞 <span>099668 88060</span>
+      </a>
+
       <button class="cart-btn" id="cartBtn" aria-label="Open cart">
-        <svg class="cart-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <svg class="cart-ico" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true">
+          <circle cx="9" cy="21" r="1"/>
+          <circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
         <span class="cart-count" id="cartCount" hidden>0</span>
       </button>
     </div>
@@ -39,15 +139,30 @@
     <!-- ======= Hero ======= -->
     <section class="hero">
       <div class="hero-overlay"></div>
+
       <div class="hero-content">
         <p class="hero-kicker">Maisammaguda · Hyderabad</p>
-        <h1>Tastify</h1>
-        <p class="hero-sub">Arabian Mandi &amp; Restaurant — smoky dum mandi, family-style biryanis &amp; fiery starters.</p>
+
+        <h1>Tastify Arabian Mandi &amp; Restaurant</h1>
+
+        <p class="hero-sub">
+          Enjoy delicious Chicken Mandi, Mutton Mandi, Dum Biryanis
+          and Family Mandi Combos at Tastify, Maisammaguda, Hyderabad.
+        </p>
+
         <div class="hero-cta">
-          <a class="btn btn-primary" href="#menu">Explore the Menu</a>
-          <a class="btn btn-wa" href="https://wa.me/919966888060?text=Hi%20Tastify!%20I%20would%20like%20to%20place%20an%20order." target="_blank" rel="noopener">Order on WhatsApp</a>
+          <a class="btn btn-primary" href="#menu">
+            Explore the Menu
+          </a>
+
+          <a class="btn btn-wa"
+            href="https://wa.me/919966888060?text=Hi%20Tastify!%20I%20would%20like%20to%20place%20an%20order."
+            target="_blank" rel="noopener noreferrer">
+            Order on WhatsApp
+          </a>
         </div>
-        <ul class="hero-services" aria-label="Services">
+
+        <ul class="hero-services" aria-label="Restaurant services">
           <li>Family packs</li>
         </ul>
       </div>
@@ -56,144 +171,347 @@
     <!-- ======= Specials ======= -->
     <section class="specials" id="specials">
       <h2 class="section-title">House <em>Specials</em></h2>
-      <p class="section-sub">What the regulars come back for — straight off the charcoal.</p>
+
+      <p class="section-sub">
+        Discover our signature mandi, biryanis and family platters.
+      </p>
+
       <div class="specials-grid">
+
         <a class="special-card" href="#cat-mandi">
-          <img src="assets/img/dishes/mandi-chicken-tastify.webp" alt="Tastify Chicken Mandi — mandi rice with grilled chicken, mayo &amp; shorba" loading="lazy" onerror="this.style.display='none'">
+          <img
+            src="assets/img/dishes/mandi-chicken-tastify.webp"
+            alt="Tastify signature chicken mandi with Arabian rice, grilled chicken, mayo and shorba"
+            loading="lazy"
+            onerror="this.style.display='none'">
+
           <div class="special-body">
             <h3>Signature Chicken Mandi</h3>
-            <p>Smoky Arabian rice, slow-cooked chicken, mayo &amp; shorba. Single / Full / Family.</p>
-            <span class="special-price">from ₹229</span>
+            <p>
+              Smoky Arabian rice, slow-cooked chicken, mayo and shorba.
+              Available in Single, Full and Family portions.
+            </p>
+            <span class="special-price">From ₹229</span>
           </div>
         </a>
+
         <a class="special-card" href="#cat-specials">
-          <img src="assets/img/dishes/spl-thali-tastify.webp?v=20261028a" alt="Tastify Special Mandi Thali — grand platter for 7–8" loading="lazy" onerror="this.style.display='none'">
+          <img
+            src="assets/img/dishes/spl-thali-tastify.webp?v=20261028a"
+            alt="Tastify special mandi thali with chicken, mutton, fish, chicken 65, eggs and fries"
+            loading="lazy"
+            onerror="this.style.display='none'">
+
           <div class="special-body">
-            <h3>Spl Mandi Thali</h3>
-            <p>Fry &amp; juicy chicken, mutton, fish, chicken 65, eggs &amp; fries — feeds 7–8.</p>
+            <h3>Special Mandi Thali</h3>
+            <p>
+              A grand platter with chicken, mutton, fish, chicken 65,
+              eggs and fries. Perfect for sharing.
+            </p>
             <span class="special-price">₹2,200</span>
           </div>
         </a>
+
         <a class="special-card" href="#cat-biryani">
-          <img src="assets/img/dishes/chicken-biryani-tastify.webp" alt="Tastify Dum Biryani — chicken biryani with saffron rice, mint &amp; raita" loading="lazy" onerror="this.style.display='none'">
+          <img
+            src="assets/img/dishes/chicken-biryani-tastify.webp"
+            alt="Tastify dum chicken biryani with aromatic rice, mint and raita"
+            loading="lazy"
+            onerror="this.style.display='none'">
+
           <div class="special-body">
             <h3>Dum Biryanis</h3>
-            <p>Chicken, mutton, veg &amp; more — served single, full or family size.</p>
-            <span class="special-price">from ₹140</span>
+            <p>
+              Chicken, mutton, veg and more.
+              Available in single, full and family portions.
+            </p>
+            <span class="special-price">From ₹140</span>
           </div>
         </a>
+
       </div>
     </section>
 
     <!-- ======= Menu ======= -->
     <section class="menu-section" id="menu">
-      <h2 class="section-title">The <em>Menu</em></h2>
-      <p class="section-sub">Everything we serve, with exact menu-board prices. Tap <b>+</b> to build your order.</p>
+      <h2 class="section-title">Our <em>Menu</em></h2>
+
+      <p class="section-sub">
+        Explore chicken mandi, mutton mandi, biryanis, starters
+        and vegetarian dishes with menu prices.
+      </p>
 
       <div class="menu-controls">
         <div class="search-wrap">
-          <input type="search" id="menuSearch" placeholder="Search mandi, biryani, paneer…" aria-label="Search menu">
-          <button id="clearSearch" class="clear-btn" hidden aria-label="Clear search">✕</button>
+          <input
+            type="search"
+            id="menuSearch"
+            placeholder="Search mandi, biryani, paneer…"
+            aria-label="Search restaurant menu">
+
+          <button id="clearSearch"
+            class="clear-btn"
+            hidden
+            aria-label="Clear search">✕</button>
         </div>
+
         <label class="veg-toggle">
           <input type="checkbox" id="vegOnly">
-          <span class="veg-dot veg" aria-hidden="true"></span> Veg only
+          <span class="veg-dot veg" aria-hidden="true"></span>
+          Veg only
         </label>
       </div>
 
-      <div class="cat-pills" id="catPills" role="tablist" aria-label="Menu categories"></div>
+      <div class="cat-pills"
+        id="catPills"
+        role="tablist"
+        aria-label="Menu categories"></div>
 
-      <div id="menuRoot" class="menu-root" aria-live="polite"></div>
+      <div id="menuRoot"
+        class="menu-root"
+        aria-live="polite"></div>
+    </section>
+
+    <!-- ======= Local SEO Content ======= -->
+    <section class="local-seo" id="about">
+      <h2 class="section-title">
+        Arabian Mandi Restaurant in <em>Maisammaguda</em>
+      </h2>
+
+      <p>
+        Looking for delicious Arabian Mandi in Maisammaguda,
+        Hyderabad? Tastify Arabian Mandi &amp; Restaurant serves
+        flavorful chicken mandi, juicy mutton mandi, dum biryanis,
+        crispy starters and family-sized mandi platters.
+      </p>
+
+      <p>
+        Whether you are visiting with friends, family or colleagues,
+        explore our menu and enjoy freshly prepared meals at Tastify.
+        From signature chicken mandi to special mandi thalis and
+        budget-friendly biryanis, discover your favorite dishes.
+      </p>
+
+      <p>
+        Visit our restaurant in Maisammaguda, Hyderabad,
+        or contact us to place your order through WhatsApp.
+      </p>
+
+      <p>
+        <a href="#menu">Explore our menu</a> |
+        <a href="#visit">Find our restaurant</a> |
+        <a href="tel:+919966888060">Call Tastify</a>
+      </p>
     </section>
 
     <!-- ======= Reviews ======= -->
     <section class="reviews" id="reviews">
       <h2 class="section-title">What <em>Guests Say</em></h2>
+
       <div class="reviews-head">
         <div class="rating-big">
           <span class="rating-number">4.3</span>
-          <span class="stars" aria-label="4.3 out of 5 stars"><span class="stars-fill" style="width:86%">★★★★★</span>★★★★★</span>
+
+          <span class="stars"
+            aria-label="4.3 out of 5 stars">
+            <span class="stars-fill" style="width:86%">★★★★★</span>★★★★★
+          </span>
+
           <span class="rating-count">872 Google reviews</span>
         </div>
-        <p class="reviews-note">Loved by the student crowd of Maisammaguda for budget-friendly, tasty mandi.</p>
+
+        <p class="reviews-note">
+          Loved by the student crowd of Maisammaguda
+          for budget-friendly, tasty mandi.
+        </p>
       </div>
+
       <div class="review-grid">
+
         <figure class="review-card">
-          <blockquote>“Best place to have fun with friends and family, tasty food and good environment.”</blockquote>
-          <figcaption><span class="avatar" aria-hidden="true">D</span><div><b>Diner</b><small>Google review</small></div></figcaption>
+          <blockquote>
+            “Best place to have fun with friends and family,
+            tasty food and good environment.”
+          </blockquote>
+          <figcaption>
+            <span class="avatar" aria-hidden="true">D</span>
+            <div><b>Diner</b><small>Google review</small></div>
+          </figcaption>
         </figure>
+
         <figure class="review-card">
-          <blockquote>“The meat is cooked with the heat and smoke, creating a flavorful and juicy dish.”</blockquote>
-          <figcaption><span class="avatar" aria-hidden="true">G</span><div><b>Guest</b><small>Google review</small></div></figcaption>
+          <blockquote>
+            “The meat is cooked with the heat and smoke,
+            creating a flavorful and juicy dish.”
+          </blockquote>
+          <figcaption>
+            <span class="avatar" aria-hidden="true">G</span>
+            <div><b>Guest</b><small>Google review</small></div>
+          </figcaption>
         </figure>
+
         <figure class="review-card">
-          <blockquote>“We had ordered 4 Piece Chicken Mandi along with some cool drinks.”</blockquote>
-          <figcaption><span class="avatar" aria-hidden="true">G</span><div><b>Guest</b><small>Google review</small></div></figcaption>
+          <blockquote>
+            “We had ordered 4 Piece Chicken Mandi
+            along with some cool drinks.”
+          </blockquote>
+          <figcaption>
+            <span class="avatar" aria-hidden="true">G</span>
+            <div><b>Guest</b><small>Google review</small></div>
+          </figcaption>
         </figure>
+
         <figure class="review-card">
-          <blockquote>“Budget friendly and tasty… Personally I loved the chicken mandi here.”</blockquote>
-          <figcaption><span class="avatar" aria-hidden="true">R</span><div><b>Ranjith Kumar</b><small>Local Guide · Google</small></div></figcaption>
+          <blockquote>
+            “Budget friendly and tasty… Personally
+            I loved the chicken mandi here.”
+          </blockquote>
+          <figcaption>
+            <span class="avatar" aria-hidden="true">R</span>
+            <div><b>Ranjith Kumar</b><small>Local Guide · Google</small></div>
+          </figcaption>
         </figure>
+
         <figure class="review-card">
-          <blockquote>“Fry piece mandi is so good here.”</blockquote>
-          <figcaption><span class="avatar" aria-hidden="true">Y</span><div><b>Yashwanth Kotha</b><small>Google review</small></div></figcaption>
+          <blockquote>
+            “Fry piece mandi is so good here.”
+          </blockquote>
+          <figcaption>
+            <span class="avatar" aria-hidden="true">Y</span>
+            <div><b>Yashwanth Kotha</b><small>Google review</small></div>
+          </figcaption>
         </figure>
+
       </div>
     </section>
 
     <!-- ======= Visit ======= -->
     <section class="visit" id="visit">
       <h2 class="section-title">Visit <em>Us</em></h2>
+
       <div class="visit-grid">
+
         <div class="visit-info">
-          <h3>Tastify <small>Arabian Mandi &amp; Restaurant</small></h3>
+          <h3>
+            Tastify
+            <small>Arabian Mandi &amp; Restaurant</small>
+          </h3>
+
           <ul class="visit-list">
-            <li><span aria-hidden="true">📍</span> HF63+X22, Maisammaguda, Bhadurpalle,<br>Hyderabad, Telangana 500100</li>
-            <li><span aria-hidden="true">📞</span> <a href="tel:+919966888060">099668 88060</a></li>
+            <li>
+              <span aria-hidden="true">📍</span>
+              HF63+X22, Maisammaguda, Bhadurpalle,
+              Hyderabad, Telangana 500100
+            </li>
+
+            <li>
+              <span aria-hidden="true">📞</span>
+              <a href="tel:+919966888060">099668 88060</a>
+            </li>
           </ul>
+
           <div class="visit-cta">
-            <a class="btn btn-primary" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Tastify%20Maisammaguda%20Hyderabad">Get Directions</a>
-            <a class="btn btn-wa" href="https://wa.me/919966888060?text=Hi%20Tastify!%20I%20would%20like%20to%20book%20a%20table." target="_blank" rel="noopener">Book on WhatsApp</a>
+            <a class="btn btn-primary"
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://www.google.com/maps/search/?api=1&query=Tastify%20Maisammaguda%20Hyderabad">
+              Get Directions
+            </a>
+
+            <a class="btn btn-wa"
+              href="https://wa.me/919966888060?text=Hi%20Tastify!%20I%20would%20like%20to%20book%20a%20table."
+              target="_blank"
+              rel="noopener noreferrer">
+              Book on WhatsApp
+            </a>
           </div>
         </div>
+
         <div class="visit-map">
-          <iframe title="Map to Tastify, Maisammaguda, Hyderabad" loading="lazy"
+          <iframe
+            title="Map to Tastify Arabian Mandi Restaurant, Maisammaguda, Hyderabad"
+            loading="lazy"
             src="https://maps.google.com/maps?q=Tastify%2C%20Maisammaguda%2C%20Hyderabad&t=&z=15&ie=UTF8&iwloc=&output=embed"
-            referrerpolicy="no-referrer-when-downgrade"></iframe>
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
         </div>
+
       </div>
     </section>
+
   </main>
 
   <!-- ======= Footer ======= -->
   <footer class="site-footer">
-    <div class="footer-brand"><b>Tastify</b> <small>Arabian Mandi &amp; Restaurant</small></div>
-    <p>HF63+X22, Maisammaguda, Bhadurpalle, Hyderabad, Telangana 500100 · <a href="tel:+919966888060">099668 88060</a></p>
+    <div class="footer-brand">
+      <b>Tastify</b>
+      <small>Arabian Mandi &amp; Restaurant</small>
+    </div>
+
+    <p>
+      HF63+X22, Maisammaguda, Bhadurpalle,
+      Hyderabad, Telangana 500100 ·
+      <a href="tel:+919966888060">099668 88060</a>
+    </p>
   </footer>
 
   <!-- ======= Cart ======= -->
   <button class="cart-fab" id="cartFab" aria-label="Open cart">
-    <svg class="cart-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    <svg class="cart-ico"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true">
+      <circle cx="9" cy="21" r="1"/>
+      <circle cx="20" cy="21" r="1"/>
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+    </svg>
+
     <span class="cart-count" id="fabCount" hidden>0</span>
   </button>
 
   <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
-  <aside class="cart-drawer" id="cartDrawer" aria-label="Your order" aria-hidden="true">
+
+  <aside class="cart-drawer"
+    id="cartDrawer"
+    aria-label="Your order"
+    aria-hidden="true">
+
     <header class="cart-head">
       <h3>Your Order</h3>
       <button class="icon-btn" id="closeCart" aria-label="Close cart">✕</button>
     </header>
+
     <div class="cart-items" id="cartItems"></div>
+
     <footer class="cart-foot">
-      <div class="cart-total"><span>Total</span><b id="cartTotal">₹0</b></div>
-      <a class="btn btn-wa btn-block" id="waOrder" href="#" target="_blank" rel="noopener">Place order on WhatsApp</a>
-      <button class="link-danger" id="clearCart">Clear order</button>
+      <div class="cart-total">
+        <span>Total</span>
+        <b id="cartTotal">₹0</b>
+      </div>
+
+      <a class="btn btn-wa btn-block"
+        id="waOrder"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer">
+        Place order on WhatsApp
+      </a>
+
+      <button class="link-danger" id="clearCart">
+        Clear order
+      </button>
     </footer>
   </aside>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <!-- Scripts -->
   <script src="data.js?v=20261028a" defer></script>
   <script src="script.js?v=20261028a" defer></script>
+
 </body>
 </html>
