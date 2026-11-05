@@ -11,6 +11,26 @@ Nothing to generate for serving. (Optional, only when replacing dish photos from
 3. Delete the PNG originals: `rm -f assets/img/dishes/*-tastify.png`
 4. Point the dish's `img:` field in `data.js` at `<dish-name>-tastify.webp`
 
+## Check the owner API
+
+```bash
+node .freebuff/worker-test.mjs
+```
+
+Runs `worker.js` against a stubbed D1 database: PIN gate, save/read-back, `null` = all available, input validation, asset passthrough.
+
+## Build the deploy folder
+
+A deploy may only ship files that are actually referenced, and the reference scan **must include `styles.css`** — the hero background (`assets/img/restaurant.png`) is referenced only from CSS. Earlier builds scanned `index.html` + `data.js` only, which silently dropped the hero photo on the live site (big empty grey block at the top).
+
+```bash
+node .freebuff/build-deploy.mjs
+```
+
+- Emits `.freebuff/deploy/` (`manifest.json`, `worker.js`, `assets/` with page files + every referenced image)
+- Dish photos are downscaled to 600px wide and re-encoded for the upload (~10 MB cap)
+- Prints total size; expect ~6.7 MB and `missing: none`
+
 ## Run the server
 
 Python http.server on the project default preview port 8377, detached:

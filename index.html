@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <!-- Primary SEO -->
   <title>Tastify Mandi Restaurant | Chicken Mandi in Maisammaguda, Hyderabad</title>
 
@@ -93,6 +92,7 @@
   }
   </script>
 
+  <link rel="stylesheet" href="styles.css?v=20261104b">
 </head>
 
 <body>
@@ -240,6 +240,7 @@
         Explore chicken mandi, mutton mandi, biryanis, starters
         and vegetarian dishes with menu prices.
       </p>
+      <p class="today-note" id="todayNote" hidden></p>
 
       <div class="menu-controls">
         <div class="search-wrap">
@@ -453,6 +454,9 @@
       Hyderabad, Telangana 500100 ·
       <a href="tel:+919966888060">099668 88060</a>
     </p>
+    <p class="footer-note">
+      <button class="owner-link" id="ownerOpen" type="button">Owner login</button>
+    </p>
   </footer>
 
   <!-- ======= Cart ======= -->
@@ -507,11 +511,31 @@
     </footer>
   </aside>
 
+  <!-- ======= Owner: today's availability ======= -->
+  <div class="owner-overlay" id="ownerPanel" hidden>
+    <section class="owner-card" role="dialog" aria-modal="true" aria-labelledby="ownerTitle">
+      <header class="owner-head">
+        <div>
+          <h3 id="ownerTitle">Today's Menu</h3>
+          <p class="owner-sub" id="ownerSub">Customers only see the items you tick here.</p>
+        </div>
+        <button class="icon-btn" id="ownerClose" type="button" aria-label="Close owner panel">✕</button>
+      </header>
+      <div class="owner-body" id="ownerBody"></div>
+      <footer class="owner-foot" id="ownerFoot" hidden>
+        <span class="owner-count" id="ownerCount"></span>
+        <div class="owner-actions">
+          <button class="btn btn-ghost" id="ownerAll" type="button">Select all</button>
+          <button class="btn btn-ghost" id="ownerNone" type="button">Clear all</button>
+          <button class="btn btn-primary" id="ownerSave" type="button">Save for today</button>
+        </div>
+      </footer>
+    </section>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <!-- Scripts -->
-  <script src="data.js?v=20261028a" defer></script>
-  <script src="script.js?v=20261028a" defer></script>
-
+  <script src="data.js?v=20261104b" defer></script>
+  <script src="script.js?v=20261104b" defer></script>
 </body>
 </html>

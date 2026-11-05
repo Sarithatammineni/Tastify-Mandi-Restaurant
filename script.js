@@ -4,14 +4,22 @@
 const BASE = "assets/img/dishes/";
 const fmt = (n) => "₹" + n.toLocaleString("en-IN");
 const WA_PHONE = "919966888060";
+const POLL_MS = 10000;                 // how often the page checks for a new menu
 const CART_SVG = `<svg class="cart-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>`;
 
 /* ---------- State ---------- */
 let cart = {};            // key -> { name, price, qty }
+let menuModel = MENU;     // replaced by the server's menu when the database answers
 let activeCat = "All";
 let query = "";
 let vegOnly = false;
 let choosingKey = "";     // combined dish name whose option chooser is open
+let availability = null;  // null = everything available, else Set of dish names
+let apiMode = "local";    // "server" once a database-backed API answers
+let lastUpdatedAt = null; // server timestamp of the menu we are showing
+let ownerToken = localStorage.getItem("tastify-owner-token") || "";
+let ownerName = localStorage.getItem("tastify-owner-name") || "";
+let ownerTicked = new Set();  // tentative ticks while the owner panel is open
 
 /* ---------- Elements ---------- */
 const $ = (id) => document.getElementById(id);
@@ -30,8 +38,75 @@ function saveCart() {
   localStorage.setItem("tastify-cart", JSON.stringify(cart));
 }
 
+/* ---------- Server data ---------- */
+async function loadMenu() {
+  try {
+    const r = await fetch("api/menu", { cache: "no-store" });
+    if (!r.ok) throw new Error(String(r.status));
+    const data = await r.json();
+    if (Array.isArray(data.items) && data.items.length) menuModel = data.items;
+    availability = toSet(data.availability);
+    lastUpdatedAt = data.updatedAt || null;
+    apiMode = data.source === "db" ? "server" : "local";
+  } catch {
+    // No API at all (static preview): still let the owner try the screen out.
+    apiMode = "local";
+    try { availability = toSet(JSON.parse(localStorage.getItem("tastify-availability") || "null")); }
+    catch { availability = null; }
+  }
+}
+
+/* Live updates: the server is the source of truth, this page just watches it. */
+async function refreshAvailability() {
+  if (apiMode !== "server") return;
+  try {
+    const r = await fetch("api/availability", { cache: "no-store" });
+    if (!r.ok) return;
+    const data = await r.json();
+    if (!data.updatedAt || data.updatedAt === lastUpdatedAt) return;
+    lastUpdatedAt = data.updatedAt;
+    availability = toSet(data.items);
+    pruneCart();
+    renderPills();
+    renderMenu();
+    syncCart();
+    updateTodayNote();
+    toast("Menu updated");
+  } catch { /* offline — keep showing what we have */ }
+}
+
+function toSet(items) {
+  return Array.isArray(items) ? new Set(items) : null;
+}
+
+function isAvailable(d) {
+  return !availability || availability.has(d.name);
+}
+
+/* Drop cart lines that are no longer on today's menu. */
+function pruneCart() {
+  if (!availability) return;
+  let changed = false;
+  for (const key of Object.keys(cart)) {
+    if (!availability.has(key.split(" · ")[0])) { delete cart[key]; changed = true; }
+  }
+  if (changed) saveCart();
+}
+
+function updateTodayNote() {
+  const note = $("todayNote");
+  if (!note) return;
+  if (!availability) { note.hidden = true; return; }
+  const n = menuModel.filter(isAvailable).length;
+  note.hidden = false;
+  note.textContent = n
+    ? `Today's menu · ${n} of ${menuModel.length} items available`
+    : `Today's menu isn't published yet — message us on WhatsApp and we'll tell you what's on.`;
+}
+
 /* ---------- Menu rendering ---------- */
 function matchesFilters(d) {
+  if (!isAvailable(d)) return false;
   if (vegOnly && !d.veg) return false;
   if (activeCat !== "All" && d.cat !== activeCat) return false;
   if (query) {
@@ -69,8 +144,14 @@ function dishOptions(d) {
   return names.map((n) => ({ name: n, price: d.price }));
 }
 
+function availableCats() {
+  if (!availability) return CAT_ORDER;
+  return CAT_ORDER.filter((c) => menuModel.some((d) => d.cat === c && availability.has(d.name)));
+}
+
 function renderPills() {
-  const cats = ["All", ...CAT_ORDER];
+  const cats = ["All", ...availableCats()];
+  if (!cats.includes(activeCat)) activeCat = "All";
   catPills.innerHTML = "";
   for (const c of cats) {
     const b = document.createElement("button");
@@ -160,9 +241,12 @@ function dishCard(d) {
 }
 
 function renderMenu() {
-  const filtered = MENU.filter(matchesFilters);
+  const filtered = menuModel.filter(matchesFilters);
   if (!filtered.length) {
-    menuRoot.innerHTML = `<p class="no-results">No dishes match ${escapeHtml(query || "this filter")}. Try clearing the search or veg filter.</p>`;
+    const msg = availability && !availability.size
+      ? "Today's menu isn't published yet — message us on WhatsApp and we'll tell you what's on."
+      : `No dishes match ${escapeHtml(query || "this filter")}. Try clearing the search or veg filter.`;
+    menuRoot.innerHTML = `<p class="no-results">${msg}</p>`;
     return;
   }
   const groups = new Map();
@@ -344,6 +428,197 @@ vegToggle.addEventListener("change", () => {
   renderMenu();
 });
 
+/* ---------- Owner: credentials on this device only ---------- */
+function saveOwnerSession(token, name) {
+  ownerToken = token;
+  ownerName = name;
+  localStorage.setItem("tastify-owner-token", token);
+  localStorage.setItem("tastify-owner-name", name);
+}
+
+function clearOwnerSession() {
+  ownerToken = "";
+  ownerName = "";
+  localStorage.removeItem("tastify-owner-token");
+  localStorage.removeItem("tastify-owner-name");
+}
+
+async function ownerHeaders() {
+  return { authorization: "Bearer " + ownerToken, "content-type": "application/json" };
+}
+
+async function checkOwnerSession() {
+  if (!ownerToken) return false;
+  try {
+    const r = await fetch("api/session", { headers: { authorization: "Bearer " + ownerToken } });
+    if (!r.ok) { clearOwnerSession(); return false; }
+    const data = await r.json();
+    if (data && data.username) {
+      ownerName = data.username;
+      localStorage.setItem("tastify-owner-name", ownerName);
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function openOwnerPanel() {
+  $("ownerPanel").hidden = false;
+  document.body.style.overflow = "hidden";
+  ownerTicked = new Set(availability ? [...availability] : menuModel.map((d) => d.name));
+
+  if (apiMode !== "server") { renderOwnerList(); return; }   // static preview: no credentials
+  if (ownerToken && (await checkOwnerSession())) { renderOwnerList(); return; }
+  renderLoginScreen();
+}
+
+function closeOwnerPanel() {
+  $("ownerPanel").hidden = true;
+  document.body.style.overflow = "";
+}
+
+function renderLoginScreen(message = "") {
+  $("ownerFoot").hidden = true;
+  $("ownerSub").textContent = "Sign in on this device to edit today's menu.";
+  $("ownerBody").innerHTML = `
+    <form class="login-form" id="loginForm">
+      <label for="ownerUser">Username</label>
+      <input id="ownerUser" name="username" type="text" autocomplete="username"
+             autocapitalize="none" spellcheck="false" required>
+      <label for="ownerPass">Password</label>
+      <input id="ownerPass" name="password" type="password" autocomplete="current-password" required>
+      ${message
+        ? `<p class="pin-error">${escapeHtml(message)}</p>`
+        : `<p class="pin-hint">Only this device is signed in. Customers never need an account.</p>`}
+      <button class="btn btn-primary btn-block" type="submit" id="ownerLoginBtn">Sign in</button>
+    </form>`;
+
+  $("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = $("ownerLoginBtn");
+    btn.disabled = true;
+    try {
+      const r = await fetch("api/login", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ username: $("ownerUser").value, password: $("ownerPass").value }),
+      });
+      if (r.status === 401) { renderLoginScreen("Wrong username or password."); return; }
+      if (r.status === 503) {
+        renderLoginScreen("Owner account isn't set up on the server yet.");
+        return;
+      }
+      if (!r.ok) { renderLoginScreen("Couldn't sign in — try again."); return; }
+      const data = await r.json();
+      saveOwnerSession(data.token, data.username);
+      renderOwnerList();
+    } finally {
+      btn.disabled = false;
+    }
+  });
+  $("ownerUser").focus();
+}
+
+function renderOwnerList() {
+  $("ownerSub").textContent = apiMode === "server"
+    ? "Customers only see the items you tick here."
+    : "Preview mode — changes stay on this device.";
+
+  const signOut = apiMode === "server" && ownerToken
+    ? `<p class="owner-signedin">Signed in as <b>${escapeHtml(ownerName || "owner")}</b>
+         <button class="link-danger" id="ownerSignOut" type="button">Sign out</button></p>`
+    : "";
+
+  const groups = new Map();
+  for (const d of menuModel) {
+    if (!groups.has(d.cat)) groups.set(d.cat, []);
+    groups.get(d.cat).push(d);
+  }
+  const list = CAT_ORDER.filter((c) => groups.has(c)).map((c) => {
+    const items = groups.get(c);
+    return `<section class="owner-group">
+      <h4>${escapeHtml(c)}</h4>
+      <div class="owner-items">
+        ${items.map((d) => `<label class="owner-item">
+          <input type="checkbox" data-dish="${escapeHtml(d.name)}"
+                 ${ownerTicked.has(d.name) ? "checked" : ""}>
+          <span>${escapeHtml(d.name)}</span>
+        </label>`).join("")}
+      </div>
+    </section>`;
+  }).join("");
+
+  $("ownerBody").innerHTML = signOut + list;
+  $("ownerFoot").hidden = false;
+  updateOwnerCount();
+
+  const out = $("ownerSignOut");
+  if (out) out.addEventListener("click", () => { clearOwnerSession(); closeOwnerPanel(); toast("Signed out"); });
+}
+
+function updateOwnerCount() {
+  $("ownerCount").textContent = `${ownerTicked.size} of ${menuModel.length} items ticked`;
+}
+
+async function saveOwnerMenu() {
+  const btn = $("ownerSave");
+  btn.disabled = true;
+  const payload = ownerTicked.size === menuModel.length ? null : [...ownerTicked];
+  try {
+    if (apiMode === "server") {
+      const r = await fetch("api/availability", {
+        method: "POST",
+        headers: await ownerHeaders(),
+        body: JSON.stringify({ items: payload }),
+      });
+      if (r.status === 401) {
+        clearOwnerSession();
+        renderLoginScreen("Session expired — sign in again.");
+        return;
+      }
+      if (!r.ok) { toast("Couldn't save — check the connection"); return; }
+      const data = await r.json();
+      availability = toSet(data.items);
+      lastUpdatedAt = data.updatedAt || lastUpdatedAt;
+    } else {
+      localStorage.setItem("tastify-availability", JSON.stringify(payload));
+      availability = payload ? new Set(payload) : null;
+    }
+    pruneCart();
+    renderPills();
+    renderMenu();
+    syncCart();
+    updateTodayNote();
+    closeOwnerPanel();
+    toast(payload ? `Today's menu saved · ${payload.length} items` : "Everything marked available ✓");
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+$("ownerOpen").addEventListener("click", openOwnerPanel);
+$("ownerClose").addEventListener("click", closeOwnerPanel);
+$("ownerPanel").addEventListener("click", (e) => {
+  if (e.target === $("ownerPanel")) closeOwnerPanel();
+});
+$("ownerBody").addEventListener("change", (e) => {
+  const box = e.target.closest("input[data-dish]");
+  if (!box) return;
+  if (box.checked) ownerTicked.add(box.dataset.dish);
+  else ownerTicked.delete(box.dataset.dish);
+  updateOwnerCount();
+});
+$("ownerAll").addEventListener("click", () => {
+  ownerTicked = new Set(menuModel.map((d) => d.name));
+  renderOwnerList();
+});
+$("ownerNone").addEventListener("click", () => {
+  ownerTicked = new Set();
+  renderOwnerList();
+});
+$("ownerSave").addEventListener("click", saveOwnerMenu);
+
 /* ---------- Reveal on scroll ---------- */
 const revealables = document.querySelectorAll(".special-card, .review-card, .visit-grid, .section-title, .section-sub");
 if ("IntersectionObserver" in window) {
@@ -356,7 +631,18 @@ if ("IntersectionObserver" in window) {
 }
 
 /* ---------- Init ---------- */
-loadCart();
-renderPills();
-renderMenu();
-syncCart();
+async function init() {
+  localStorage.removeItem("tastify-owner-pin"); // token replaced the old PIN
+  loadCart();
+  await loadMenu();
+  pruneCart();
+  renderPills();
+  renderMenu();
+  syncCart();
+  updateTodayNote();
+  setInterval(refreshAvailability, POLL_MS);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) refreshAvailability();
+  });
+}
+init();
