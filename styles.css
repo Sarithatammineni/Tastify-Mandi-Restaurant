@@ -114,14 +114,7 @@ h1, h2, h3 { line-height: 1.2; margin: 0 0 .4em; }
   padding: 6px 13px; border-radius: 999px; font-size: 13.5px; font-weight: 600;
 }
 .badge-rating { background: rgba(232, 162, 61, 0.25); border-color: rgba(232, 162, 61, 0.5); }
-.hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 26px; }
-.hero-services {
-  list-style: none; display: flex; gap: 18px; justify-content: center;
-  flex-wrap: wrap; padding: 0; margin: 0;
-  color: #e8d9c8; font-size: 13.5px;
-}
-.hero-services li::before { content: "• "; color: var(--gold); }
-
+.hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 /* ---------- Buttons ---------- */
 .btn {
   display: inline-block; text-decoration: none; text-align: center;
