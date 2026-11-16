@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Crawl-delay is not needed: the site is fully static.
+Sitemap: https://tastifymandi.in/sitemap.xml

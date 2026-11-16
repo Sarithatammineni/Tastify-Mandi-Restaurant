@@ -227,7 +227,7 @@ function dishCard(d) {
     : '<span class="nonveg-mark" title="Non-veg"></span>';
 
   const img = d.img
-    ? `<img src="${BASE}${d.img}?v=20261116a" alt="${escapeHtml(d.name)}" loading="lazy"
+    ? `<img src="${BASE}${d.img}?v=20261116b" alt="${escapeHtml(d.name)}" loading="lazy"
          onerror="this.remove()">`
     : "";
   return `<article class="dish">

@@ -91,7 +91,7 @@ h1, h2, h3 { line-height: 1.2; margin: 0 0 .4em; }
      so the hero never collapses into a blank grey band. */
   background-color: #2a1a11;
   background-image:
-    url("assets/img/restaurant.png"),
+    url("assets/img/restaurant-hero.webp"),
     linear-gradient(135deg, #3a2417 0%, #6b3f22 45%, #2a1a11 100%);
   background-position: center 40%, center;
   background-size: cover, cover;
