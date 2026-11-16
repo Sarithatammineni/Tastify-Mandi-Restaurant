@@ -227,7 +227,7 @@ function dishCard(d) {
     : '<span class="nonveg-mark" title="Non-veg"></span>';
 
   const img = d.img
-    ? `<img src="${BASE}${d.img}?v=20261028a" alt="${escapeHtml(d.name)}" loading="lazy"
+    ? `<img src="${BASE}${d.img}?v=20261116a" alt="${escapeHtml(d.name)}" loading="lazy"
          onerror="this.remove()">`
     : "";
   return `<article class="dish">
@@ -434,6 +434,30 @@ $("clearCart").addEventListener("click", () => {
   syncCart();
   toast("Order cleared");
 });
+
+const ORDER_SENT_KEY = "tastify-order-sent";
+
+// The WhatsApp handoff happens outside this page, so we cannot know the message
+// went out. We only mark the order here; the cart empties when the customer is
+// back on the page (or on the next visit), not while they are still in WhatsApp.
+$("waOrder").addEventListener("click", () => {
+  if (!Object.keys(cart).length) return;
+  try { localStorage.setItem(ORDER_SENT_KEY, new Date().toISOString()); } catch {}
+});
+
+function orderWasSent() {
+  try { return !!localStorage.getItem(ORDER_SENT_KEY); } catch { return false; }
+}
+
+function clearPlacedOrder() {
+  if (!orderWasSent()) return;
+  try { localStorage.removeItem(ORDER_SENT_KEY); } catch {}
+  if (!Object.keys(cart).length) return;
+  cart = {};
+  syncCart();
+  closeCart();
+  toast("Order sent ✓ Cart cleared");
+}
 
 searchInput.addEventListener("input", () => {
   query = searchInput.value.trim();
@@ -664,9 +688,12 @@ async function init() {
   renderMenu();
   syncCart();
   updateTodayNote();
+  clearPlacedOrder(); // an order sent in an earlier visit empties the cart here
   setInterval(refreshAvailability, POLL_MS);
   document.addEventListener("visibilitychange", () => {
-    if (!document.hidden) refreshAvailability();
+    if (document.hidden) return;
+    refreshAvailability();
+    clearPlacedOrder(); // coming back from WhatsApp counts as a new visit
   });
 }
 init();
