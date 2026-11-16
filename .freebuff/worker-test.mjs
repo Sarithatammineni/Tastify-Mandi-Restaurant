@@ -87,7 +87,7 @@ const check = (name, cond, extra = "") => {
 console.log("no database");
 {
   const menu = await (await call({ ASSETS }, "/api/menu")).json();
-  check("menu falls back to bundled seed", menu.source === "bundled" && menu.items.length === 131, menu.source);
+  check("menu falls back to bundled seed", menu.source === "bundled" && menu.items.length === MENU_SEED.length, menu.source);
   check("availability null without db", menu.availability === null);
 
   const login = await call({ ASSETS }, "/api/login", {
@@ -103,10 +103,10 @@ console.log("menu seeding");
 {
   const menu = await (await call(env, "/api/menu")).json();
   check("source db", menu.source === "db", menu.source);
-  check("131 items seeded", menu.items.length === 131, String(menu.items.length));
+  check("whole seed is seeded", menu.items.length === MENU_SEED.length, String(menu.items.length));
   check(
     "sizes survive the round-trip",
-    JSON.stringify(menu.items[0].sizes) === '{"Single":229,"Full":379,"Family":549}',
+    JSON.stringify(menu.items[0].sizes) === JSON.stringify(MENU_SEED[0].sizes),
     JSON.stringify(menu.items[0])
   );
   check("veg flag is boolean", menu.items[1].veg === true);

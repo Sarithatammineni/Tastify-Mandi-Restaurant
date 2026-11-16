@@ -335,10 +335,33 @@ function updateWaLink() {
   const lines = entries.map(([key, it]) =>
     `• ${it.name} × ${it.qty} = ₹${(it.price * it.qty).toLocaleString("en-IN")}`);
   const msg =
-    "Hi Tastify! I'd like to order:\n\n" + lines.join("\n") +
-    "\n\nTotal: ₹" + cartTotal().toLocaleString("en-IN") +
-    "\n\n(Name: __)\n(Address: __)";
+    "Hi Tastify! I'd like to order:\n" + lines.join("\n") +
+    "\nTotal: ₹" + cartTotal().toLocaleString("en-IN") +
+    "\nMobile: __\nAddress: __" +
+    (deliveryCoords
+      ? `\nLocation: https://www.google.com/maps?q=${deliveryCoords.lat.toFixed(6)},${deliveryCoords.lng.toFixed(6)}`
+      : "");
   a.href = `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(msg)}`;
+}
+
+/* ---------- Delivery location ---------- */
+// The browser asks once; the exact pin goes into the WhatsApp message so the
+// delivery agent can open it in Google Maps with one tap.
+let deliveryCoords = null;
+let askedForLocation = false;
+
+function askForLocation() {
+  if (askedForLocation || !navigator.geolocation) return;
+  askedForLocation = true;
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      deliveryCoords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      updateWaLink();
+      toast("Location added for delivery ✓");
+    },
+    () => {}, // denied or unavailable — the address line still carries the order
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 300000 }
+  );
 }
 
 /* ---------- Drawer ---------- */
@@ -347,6 +370,7 @@ function openCart() {
   $("cartDrawer").setAttribute("aria-hidden", "false");
   $("drawerBackdrop").hidden = false;
   document.body.style.overflow = "hidden";
+  askForLocation();
 }
 function closeCart() {
   $("cartDrawer").classList.remove("open");

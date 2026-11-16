@@ -33,7 +33,7 @@ python -m http.server 8377
 - **Live menu** — the page re-checks the server every 10 s and whenever the tab regains focus, so an update from the owner reaches open phones without a reload
 - **Owner screen for today's menu** — the owner ticks what's available today and customers only see (and can order) those items
 - **No customer accounts** — customers browse and order anonymously; only the owner ever signs in
-- "Place order on WhatsApp" sends the full order + total to **099668 88060**
+- "Place order on WhatsApp" sends the full order + total to **099668 88060**, plus a Google Maps pin (`google.com/maps?q=lat,lng`) captured with the browser's location permission so the delivery agent can open the customer's spot in one tap. If permission is refused the message still goes out with the mobile number and address lines
 - Click-to-call, Google Maps directions, opening hours, rating & reviews
 
 ## Owner: today's menu

@@ -1,2 +1,6 @@
 /freebuff-sites-build/
 .freebuff/deploy/
+.freebuff/dev.db
+.freebuff/dev.db-journal
+.freebuff/dev.db-wal
+.freebuff/dev.db-shm

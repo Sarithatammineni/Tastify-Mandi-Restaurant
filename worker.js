@@ -223,6 +223,7 @@ const OWNER_TABLE = `CREATE TABLE IF NOT EXISTS owner (
 )`;
 
 let schemaReady = false; // per-isolate cache so we do not re-check on every request
+const SEED_VERSION = "2026-11-15d"; // bump when menu-seed.js content changes (prices etc.)
 
 async function ensureSchema(env) {
   if (schemaReady) return;
@@ -232,14 +233,20 @@ async function ensureSchema(env) {
     env.DB.prepare(OWNER_TABLE),
   ]);
 
+  // Re-seed whenever the bundled menu is newer than what the database holds;
+  // availability lives in `settings`, so today's checked items survive this.
   const count = await env.DB.prepare("SELECT COUNT(*) AS n FROM menu_items").first();
-  if (!count || !count.n) {
-    const insert = `INSERT OR REPLACE INTO menu_items
-      (id, ord, cat, name, veg, price, sizes, prices, note, img)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const seeded = await env.DB.prepare(
+    "SELECT value FROM settings WHERE key = 'menu_seed'"
+  ).first();
+  const upToDate = count && count.n && seeded && seeded.value === SEED_VERSION;
+
+  if (!upToDate) {
+    const insert = `INSERT INTO menu_items
+      (ord, cat, name, veg, price, sizes, prices, note, img)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     const statements = MENU_SEED.map((d, i) =>
       env.DB.prepare(insert).bind(
-        i + 1,
         d.ord ?? i,
         d.cat,
         d.name,
@@ -251,9 +258,15 @@ async function ensureSchema(env) {
         d.img ?? null
       )
     );
+    // Rewrite the table so renamed or dropped dishes cannot linger as duplicates.
+    statements.unshift(env.DB.prepare("DELETE FROM menu_items"));
     for (let i = 0; i < statements.length; i += 50) {
       await env.DB.batch(statements.slice(i, i + 50));
     }
+    await env.DB.prepare(
+      `INSERT INTO settings (key, value, updated_at) VALUES ('menu_seed', ?, ?)
+       ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at`
+    ).bind(SEED_VERSION, new Date().toISOString()).run();
   }
   schemaReady = true;
 }
