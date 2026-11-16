@@ -4,3 +4,13 @@
 .freebuff/dev.db-journal
 .freebuff/dev.db-wal
 .freebuff/dev.db-shm
+
+# Working files that must never be published
+/index-backup.html
+/*.patch
+/vercel-*.png
+/crispy fish.webp
+/crispy prawns.jpg
+/WhatsApp Image*.jpeg
+/results/
+/results_*
